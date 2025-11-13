@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.TaskService.model.Task;
 
+@RestController
+@RequestMapping("/tasks")
 public class TaskController {
 
 	private final Map<Long, Task> tasks = new HashMap<>();
@@ -21,7 +25,7 @@ public class TaskController {
 
     @PostMapping
     public String addTask(@RequestBody Task task) {
-        //  Verify user exists using User Service
+        
         String userUrl = "http://user-service/users/" + task.getUserId();
         try {
             String userResponse = restTemplate.getForObject(userUrl, String.class);
@@ -30,10 +34,10 @@ public class TaskController {
             return " User not found! Task creation failed.";
         }
 
-        //  Save the task locally
+        
         tasks.put(task.getId(), task);
 
-        //  Notify user via Notification Service
+        
         String notifyUrl = "http://notification-service/notify/" + task.getUserId();
         String notifyResponse = restTemplate.getForObject(notifyUrl, String.class);
         System.out.println(" Notification response: " + notifyResponse);
