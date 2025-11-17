@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/notify")
 public class NotificationController {
 
-	@GetMapping("/{user}")
+	@GetMapping("/{userId}")
     public String sendNotification(@PathVariable Long userId) {
         return "Notification sent to user: " + userId;
     }
